@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Twitch Streams Searcher</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="My first project on new tecnologies">
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript,BootStrap,JQuery">
+  <meta name="author" content="Elio Mota">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  
+  <script src="js/twitch_script.js"></script>
+  <link rel="stylesheet" href="css/custom.css">
+<script type="text/javascript">
+
+$(document).ready(function(){
+    $("#myModal").on('hide.bs.modal', function(){
+        $("#cartoonVideo").attr('src', '');
+    });
+    
+    $("#myModal").on('show.bs.modal', function(){
+        $("#cartoonVideo").attr('src', urlAux);
+		//$("#cartoonVideo").attr('src', '');
+    });
+	
+});
+
+</script>
+</head>
+<body>
+  
+
+<div class="container">
+  <div class="row clearfix">
+	<div class="col-md-10 col-md-offset-3 column">
+	
+	  <br><br>
+	  <h1>Twitch Streams Searcher</h1>
+	  <br><br>
+	  <form id="frmSearch" class="form-horizontal">
+		<div class="form-group">
+			<div class="col-sm-4">
+				<input class="form-control" id="txtSearch" type="text" value="" placeholder="e.g. Fifa">
+			  </div>
+			  <div class="col-sm-2">
+				<button type="button" class="btn btn-default btn-block" onclick="searchTwitchStreams();">Search!</button>
+			  </div>
+		</div>
+		<div class="form-group" id="divRecords"></div>
+		<div class="loader" id="loader" style="display:none"></div>
+	  </form>
+
+	</div>
+  </div>  
+</div>  
+
+<!-- Modal HTML -->
+<div id="myModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="javascript:clearChannelName();">×</button>
+				<h4 class="modal-title" id='lblStreamDisplayName' style="color:blue">Video Player</h4>
+			</div>
+			<div class="modal-body">
+				<div class="content">
+					<iframe id="autoRefreshViewerCounter" align="left" marginwidth="0" marginheight="0" width="200" height="20" scrolling="no" frameborder="0" src="autoRefreshViewerCounter.html"></iframe><div id="lblChannelName" style="display:none"></div>
+					<br><div><strong>Status: </strong></div><div class="col-sm-5 text-small" id='lblStatus'></div>
+					<div class="content">
+						<iframe id="cartoonVideo" frameborder="1" scrolling="no" allowfullscreen="true"></iframe>					
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+
