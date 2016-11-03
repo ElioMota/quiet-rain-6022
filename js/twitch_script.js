@@ -3,25 +3,48 @@ var channelLink = "http://player.twitch.tv/?channel=";
 var urlAux = "";
 var searchLink = "https://api.twitch.tv/kraken/search/streams";
 var clientID = "q9k2mh6i7wxofogt73wr69eihx41ft7";
+var origin = "http://localhost/";
 
-var xhr = new XMLHttpRequest();
-xhr.withCredentials = true;
-
-xhr.addEventListener("readystatechange", function () {
-  console.log("readystatechange");
-  console.log("status:" + this.status);
-  console.log("readyState:" + this.readyState);
-  if (this.readyState === 4 && this.status==200) {
-    console.log(this.responseText);
-	rawData = this.responseText;
-	consumeResult(rawData);
-  }
-});
+var xmlhttp;
+function loadXMLDoc(url, onready, onerror){
+	console.log("loadXMLDoc: ini")
+   if (window.XMLHttpRequest){ // code for IE7+, Firefox, Chrome, Opera, Safari, etc.
+	
+	  console.log("loadXMLDoc: MOZILLA etc")
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.withCredentials = false;
+	  
+	  xmlhttp.onreadystatechange = onready;
+	  xmlhttp.onerror = onerror;
+	  
+      xmlhttp.open("GET",url,true);
+	  xmlhttp.setRequestHeader("Client-ID", clientID);
+	  //xmlhttp.setRequestHeader("crossDomain", true);
+	  //xmlhttp.setRequestHeader("permissions", "http://www.google.com");
+	  //xmlhttp.setRequestHeader("Origin", origin);
+	  
+      xmlhttp.send(null);
+   }else if (window.ActiveXObject){ //  code for IE6, IE5
+	  console.log("loadXMLDoc: IE5_6")
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP")
+      if (xmlhttp){
+		xmlhttp.withCredentials = false;
+	  
+        xmlhttp.onreadystatechange = onready;
+		xmlhttp.onerror = onerror;
+        xmlhttp.open("GET",url,true);
+		xmlhttp.setRequestHeader("Client-ID", clientID);
+		//xmlhttp.setRequestHeader("crossDomain", true);
+		//xmlhttp.setRequestHeader("permissions", "http://www.google.com");
+		
+        xmlhttp.send();
+      }
+   }
+   console.log("loadXMLDoc: end")
+}
 
 function consumeResult(rawData){
 	var result = "";
-	//var status = document.getElementById('txtStatus');
-	//status.value = rawData;
 	
 	var data = null;
 	if(rawData != ''){
@@ -66,7 +89,6 @@ function consumeResult(rawData){
 							;
 				
 				result += strAux;
-			//	status.value += strAux;
 			}
 			result = "<br><br><div class=\"list-group row\" style=\"max-width:700px\">" +
 					 result +
@@ -79,7 +101,6 @@ function consumeResult(rawData){
 }
 function searchTwitchStreams(){
 	document.getElementById('divRecords').innerHTML = "";
-	//document.getElementById('txtStatus').value = "";
 	
 	console.log("searchTwitchStreams()");
 	var search = document.getElementById('txtSearch').value;
@@ -94,12 +115,22 @@ function searchTwitchStreams(){
 		
 		console.log("link:" + link);
 
-		xhr.open("GET", link);
-		xhr.setRequestHeader("Client-ID", clientID);
-		xhr.send(rawData);
+		loadXMLDoc(link, xmlhttpOK, xmlhttpError);
+		
+		console.log("end searchTwitchStreams");
+
 	}
 }
-
+function xmlhttpOK(){
+  if (xmlhttp.readyState === 4 && xmlhttp.status==200) {
+    console.log(xmlhttp.responseText);
+	rawData = xmlhttp.responseText;
+	consumeResult(rawData);
+  }	
+}
+function xmlhttpError(){
+	console.log("tratar erro: xmlhttpError");	
+}
 function openSelectedChannel(channelName, channelDisplayName, channelStatus){
 	urlAux = channelLink + channelName;
 	console.log("urlAux:" + urlAux);

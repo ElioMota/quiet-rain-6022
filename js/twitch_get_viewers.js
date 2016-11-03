@@ -4,7 +4,7 @@ var channelLink = "https://api.twitch.tv/kraken/channels/";
 var clientID = "q9k2mh6i7wxofogt73wr69eihx41ft7";
 
 var xhrViews = new XMLHttpRequest();
-xhrViews.withCredentials = true;
+xhrViews.withCredentials = false;
 
 xhrViews.addEventListener("readystatechange", function () {
   if (this.readyState === 4 && this.status==200) {
